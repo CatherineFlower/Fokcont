@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 1. Фоновый цвет на случай если картинка не перекрывает весь экран -->
+    <item>
+        <shape>
+            <solid android:color="#F7FAF9" />
+        </shape>
+    </item>
+
+    <!-- 2. Изображение с сохранением пропорций (имитация centerCrop) -->
+    <item>
+        <bitmap
+            android:src="@drawable/bg_watercolor_leaf"
+            android:gravity="center|clip_horizontal|clip_vertical" />
+    </item>
+</layer-list>

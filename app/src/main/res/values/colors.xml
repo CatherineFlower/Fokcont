@@ -1,10 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#FF3700B3</color>
-    <color name="teal_200">#FF03DAC5</color>
-    <color name="teal_700">#FF018786</color>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <!-- Природная, успокаивающая палитра -->
+    <color name="primary">#4E7E6B</color> <!-- Глубокий лесной зеленый -->
+    <color name="primary_dark">#3A5F50</color>
+    <color name="primary_light">#A7C4B5</color>
+
+    <color name="accent">#8FA998</color> <!-- Шалфейный -->
+    <color name="background_start">#F1F8E9</color> <!-- Очень светлый зеленый (чайный) -->
+    <color name="background_end">#E8F5E9</color>
+
+    <color name="text_primary">#2D3436</color> <!-- Мягкий угольный -->
+    <color name="text_secondary">#636E72</color>
+
+    <color name="surface">#FFFFFF</color>
+    <color name="card_bg">#FDFDFD</color>
 </resources>

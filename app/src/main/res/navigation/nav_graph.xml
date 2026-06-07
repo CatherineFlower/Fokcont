@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/loginFragment">
+
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="ru.fokcont.app.ui.login.LoginFragment"
+        android:label="Вход">
+        <action
+            android:id="@+id/action_loginFragment_to_mainFragment"
+            app:destination="@id/mainFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_loginFragment_to_appSelectionFragment"
+            app:destination="@id/appSelectionFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_loginFragment_to_policyFragment"
+            app:destination="@id/policyFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="ru.fokcont.app.ui.main.MainFragment"
+        android:label="Главная">
+        <action android:id="@+id/action_mainFragment_to_sessionFragment" app:destination="@id/sessionFragment" />
+        <action android:id="@+id/action_mainFragment_to_historyFragment" app:destination="@id/historyFragment" />
+        <action android:id="@+id/action_mainFragment_to_statsFragment" app:destination="@id/statsFragment" />
+        <action android:id="@+id/action_mainFragment_to_settingsFragment" app:destination="@id/settingsFragment" />
+    </fragment>
+
+    <fragment android:id="@+id/sessionFragment" android:name="ru.fokcont.app.ui.session.SessionFragment" android:label="Сессия" />
+    <fragment android:id="@+id/historyFragment" android:name="ru.fokcont.app.ui.history.HistoryFragment" android:label="История" />
+    <fragment android:id="@+id/statsFragment" android:name="ru.fokcont.app.ui.stats.StatsFragment" android:label="Статистика">
+        <action android:id="@+id/action_statsFragment_to_sessionDetailsFragment" app:destination="@id/sessionDetailsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/sessionDetailsFragment"
+        android:name="ru.fokcont.app.ui.stats.details.SessionDetailsFragment"
+        android:label="Детали сессии">
+        <argument
+            android:name="session_id"
+            app:argType="integer" />
+    </fragment>
+    <fragment android:id="@+id/settingsFragment" android:name="ru.fokcont.app.ui.settings.SettingsFragment" android:label="Настройки">
+        <action android:id="@+id/action_settingsFragment_to_policyFragment" app:destination="@id/policyFragment" />
+        <action android:id="@+id/action_settingsFragment_to_appSelectionFragment" app:destination="@id/appSelectionFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/appSelectionFragment"
+        android:name="ru.fokcont.app.ui.selection.AppSelectionFragment"
+        android:label="Выбор приложений" />
+
+    <fragment
+        android:id="@+id/policyFragment"
+        android:name="ru.fokcont.app.ui.policy.PolicyFragment"
+        android:label="Юридическая информация">
+        <argument
+            android:name="policy_type"
+            app:argType="string"
+            android:defaultValue="privacy" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/interruptionFragment"
+        android:name="ru.fokcont.app.ui.interruption.InterruptionFragment"
+        android:label="Осознанность" />
+</navigation>
