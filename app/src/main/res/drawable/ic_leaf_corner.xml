@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="200dp"
+    android:height="200dp"
+    android:viewportWidth="200"
+    android:viewportHeight="200">
+    <!-- Упрощенная ветка с листьями для углов -->
+    <path
+        android:fillColor="#2D4F42"
+        android:alpha="0.3"
+        android:pathData="M160,20 C140,40 130,80 140,120 M140,40 C120,35 100,50 90,70 C100,90 120,95 140,85 M150,80 C130,75 110,90 105,110 C115,130 135,135 150,125 M145,130 C125,125 110,145 115,165 C130,180 150,170 155,150" />
+</vector>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 1. Акварельный градиент -->
+    <item>
+        <shape>
+            <gradient
+                android:angle="135"
+                android:startColor="#D1E4D9"
+                android:centerColor="#E8F1EB"
+                android:endColor="#F7FBF9" />
+        </shape>
+    </item>
+
+    <!-- 2. Листья сверху справа -->
+    <item
+        android:drawable="@drawable/ic_leaf_corner"
+        android:gravity="top|end"
+        android:top="-20dp"
+        android:right="-20dp" />
+
+    <!-- 3. Листья снизу слева (повернутые) -->
+    <item
+        android:gravity="bottom|start"
+        android:bottom="-20dp"
+        android:left="-20dp">
+        <rotate
+            android:drawable="@drawable/ic_leaf_corner"
+            android:fromDegrees="180"
+            android:pivotX="50%"
+            android:pivotY="50%" />
+    </item>
+</layer-list>

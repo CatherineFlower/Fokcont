@@ -24,3 +24,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "Fokcont"
 include(":app")
+ 
