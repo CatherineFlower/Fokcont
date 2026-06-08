@@ -10,10 +10,13 @@
 
 <p align="center">
   <a href="https://github.com/CatherineFlower/Fokcont/releases/tag/v1.0-beta">
-    <img src="https://img.shields.io/badge/🎥%20Видео%20демонстрация-4E7E6B?style=for-the-badge">
+    <img src="https://img.shields.io/badge/🎥 Видео_демонстрации-4E7E6B?style=for-the-badge&labelColor=4E7E6B&color=4E7E6B">
   </a>
   <a href="https://disk.yandex.ru/d/ewn2ce2uqNVSGA">
-    <img src="https://img.shields.io/badge/📊%20Презентация-6B8F71?style=for-the-badge">
+    <img src="https://img.shields.io/badge/📚 Презентация-4E7E6B?style=for-the-badge&labelColor=4E7E6B&color=4E7E6B">
+  </a>
+  <a href="https://github.com/CatherineFlower/Fokcont">
+    <img src="https://img.shields.io/badge/💻 Исходный_код-4E7E6B?style=for-the-badge&labelColor=4E7E6B&color=4E7E6B">
   </a>
 </p>
 
@@ -66,21 +69,19 @@
 
 ---
 
-# Демонстрация работы
+# 🎬 Демонстрация работы
 
-## 🎬 Демонстрация работы
+<p align="center">
+  <a href="https://github.com/CatherineFlower/Fokcont/releases/tag/v1.0-beta">
+    <img src="Media/Main.png" width="300" alt="Открыть видео демонстрации">
+  </a>
+</p>
 
 <p align="center">
   <a href="https://github.com/CatherineFlower/Fokcont/releases/tag/v1.0-beta">
     <img src="https://img.shields.io/badge/▶%20Смотреть%20демонстрацию-4E7E6B?style=for-the-badge" />
   </a>
 </p>
-
-## 🎬 Демонстрация работы
-
-> Полная демонстрация работы приложения доступна в релизе проекта.
->
-> ▶ **[Открыть видео демонстрации](https://github.com/CatherineFlower/Fokcont/releases/tag/v1.0-beta)**
 
 ---
 
@@ -97,7 +98,9 @@
 
 ### Главный экран
 
-![Главный экран](Media/Main.png)
+<p align="center">
+  <img src="Media/Main.png" width="280" alt="Главный экран">
+</p>
 
 ---
 
@@ -111,7 +114,9 @@
 
 ### Экран фокус-сессии
 
-![Фокус-сессия](Media/Focus-screen.png)
+<p align="center">
+  <img src="Media/Focus-screen.png" width="280" alt="Фокус-сессия">
+</p>
 
 ---
 
@@ -136,7 +141,9 @@
 
 ### Выбор приложений
 
-![Выбор приложений](Media/выбор.png)
+<p align="center">
+  <img src="Media/выбор.png" width="280" alt="Выбор приложений">
+</p>
 
 ---
 
@@ -153,7 +160,9 @@
 
 ### Overlay-интерфейс
 
-![Экран осознанности](Media/overlay.png)
+<p align="center">
+  <img src="Media/overlay.png" width="280" alt="Экран осознанности">
+</p>
 
 ---
 
@@ -173,7 +182,9 @@
 
 ### Экран статистики
 
-![Статистика](Media/stat.png)
+<p align="center">
+  <img src="Media/stat.png" width="280" alt="Статистика">
+</p>
 
 ---
 
@@ -188,7 +199,9 @@
 
 ### Настройки
 
-![Настройки](Media/settings.png)
+<p align="center">
+  <img src="Media/settings.png" width="280" alt="Настройки">
+</p>
 
 ---
 
@@ -288,7 +301,9 @@ ui/
 
 ### Соглашения
 
-![Соглашения](Media/conf.png)
+<p align="center">
+  <img src="Media/conf.png" width="280" alt="Соглашения">
+</p>
 
 ---
 
@@ -332,19 +347,19 @@ cd Fokcont
 
 ---
 
-# Материалы проекта
+<h1 align="center">📂 Материалы проекта</h1>
 
-### 📊 Презентация
-
-https://disk.yandex.ru/d/ewn2ce2uqNVSGA
-
-### 🎥 Видео демонстрации
-
-https://github.com/CatherineFlower/Fokcont/releases/tag/v1.0-beta
-
-### 💻 Исходный код
-
-https://github.com/CatherineFlower/Fokcont
+<p align="center">
+  <a href="https://github.com/CatherineFlower/Fokcont/releases/tag/v1.0-beta">
+    <img src="https://img.shields.io/badge/🎥 Видео_демонстрации-4E7E6B?style=for-the-badge&labelColor=4E7E6B&color=4E7E6B">
+  </a>
+  <a href="https://disk.yandex.ru/d/ewn2ce2uqNVSGA">
+    <img src="https://img.shields.io/badge/📚 Презентация-4E7E6B?style=for-the-badge&labelColor=4E7E6B&color=4E7E6B">
+  </a>
+  <a href="https://github.com/CatherineFlower/Fokcont">
+    <img src="https://img.shields.io/badge/💻 Исходный_код-4E7E6B?style=for-the-badge&labelColor=4E7E6B&color=4E7E6B">
+  </a>
+</p>
 
 ---
 
