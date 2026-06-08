@@ -13,3 +13,7 @@
 .externalNativeBuild
 .cxx
 local.properties
+*.webm
+*.mp4
+*.webm
+*.mp4
