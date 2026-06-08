@@ -66,9 +66,4 @@
             app:argType="string"
             android:defaultValue="privacy" />
     </fragment>
-
-    <fragment
-        android:id="@+id/interruptionFragment"
-        android:name="ru.fokcont.app.ui.interruption.InterruptionFragment"
-        android:label="Осознанность" />
 </navigation>

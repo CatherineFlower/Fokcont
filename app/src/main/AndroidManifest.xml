@@ -7,6 +7,7 @@
         tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />>
 
     <queries>
         <intent>
@@ -16,6 +17,7 @@
     </queries>
 
     <application
+        android:name=".FokcontApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -26,12 +28,14 @@
         android:theme="@style/Theme.ContextSwitch">
         <activity
             android:name=".MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
 
         <service
             android:name=".service.TrackingService"
@@ -41,6 +45,9 @@
             <property android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
                 android:value="Background application usage tracking for focus sessions" />
         </service>
+        <service
+            android:name=".service.InterruptionOverlayService"
+            android:exported="false" />
 
         <receiver
             android:name=".receiver.AppInstallReceiver"

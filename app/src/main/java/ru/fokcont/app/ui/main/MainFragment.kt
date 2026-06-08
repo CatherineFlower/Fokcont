@@ -50,6 +50,11 @@ class MainFragment : Fragment(R.layout.fragment_main) {
             } else {
                 "Активная сессия: ${activeSession.title}"
             }
+            binding.startSessionButton.text = if (activeSession == null) {
+                "Начать фокус-сессию"
+            } else {
+                "Завершить фокус-сессию"
+            }
         }
     }
 

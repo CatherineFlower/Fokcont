@@ -14,6 +14,8 @@ import ru.fokcont.app.R
 import ru.fokcont.app.data.db.AppDatabase
 import ru.fokcont.app.data.repository.SessionRepository
 import android.app.AppOpsManager
+import ru.fokcont.app.service.InterruptionOverlayService
+import android.app.usage.UsageEvents
 
 class TrackingService : Service() {
 
@@ -36,6 +38,29 @@ class TrackingService : Service() {
             startTracking()
         }
         return START_STICKY
+    }
+
+    private fun getForegroundApp(
+        usageStatsManager: UsageStatsManager,
+        fromTime: Long,
+        toTime: Long
+    ): String? {
+        val events = usageStatsManager.queryEvents(fromTime, toTime)
+        val event = UsageEvents.Event()
+
+        var foregroundPackage: String? = null
+
+        while (events.hasNextEvent()) {
+            events.getNextEvent(event)
+
+            if (event.eventType == UsageEvents.Event.MOVE_TO_FOREGROUND ||
+                event.eventType == UsageEvents.Event.ACTIVITY_RESUMED
+            ) {
+                foregroundPackage = event.packageName
+            }
+        }
+
+        return foregroundPackage
     }
 
     private fun startTracking() {
@@ -86,50 +111,49 @@ class TrackingService : Service() {
                     }
 
                     val currentTime = System.currentTimeMillis()
-                    // Увеличиваем окно поиска до 5 секунд для надежности
-                    val stats = usageStatsManager.queryUsageStats(
-                        UsageStatsManager.INTERVAL_DAILY,
-                        currentTime - 5000,
-                        currentTime
+
+                    val currentApp = getForegroundApp(
+                        usageStatsManager = usageStatsManager,
+                        fromTime = currentTime - 10_000,
+                        toTime = currentTime
                     )
 
-                    if (stats != null && stats.isNotEmpty()) {
-                        val currentApp = stats.maxByOrNull { it.lastTimeUsed }?.packageName
-                        
-                        if (currentApp != null && currentApp != applicationContext.packageName) {
-                            if (lastAppPackage != currentApp) {
-                                // Завершаем старое событие
-                                lastAppPackage?.let { oldPkg ->
-                                    val event = eventDao.getUnfinishedEvent(activeSession.id, oldPkg)
-                                    if (event != null) {
-                                        eventDao.updateEvent(event.copy(durationMs = System.currentTimeMillis() - event.startTime))
-                                    }
+                    if (currentApp != null && currentApp != applicationContext.packageName) {
+                        if (lastAppPackage != currentApp) {
+                            lastAppPackage?.let { oldPkg ->
+                                val event = eventDao.getUnfinishedEvent(activeSession.id, oldPkg)
+                                if (event != null) {
+                                    eventDao.updateEvent(
+                                        event.copy(durationMs = System.currentTimeMillis() - event.startTime)
+                                    )
                                 }
+                            }
 
-                                lastAppPackage = currentApp
-                                
-                                val distractingAppsSet = prefs.getStringSet("distracting_apps", emptySet()) ?: emptySet()
-                                val isDistracting = distractingAppsSet.contains(currentApp)
-                                
-                                // Создаем новое событие
-                                val eventId = eventDao.insertEvent(ru.fokcont.app.data.db.entity.DistractionEventEntity(
+                            lastAppPackage = currentApp
+
+                            val distractingAppsSet =
+                                prefs.getStringSet("distracting_apps", emptySet()) ?: emptySet()
+
+                            val isDistracting = distractingAppsSet.contains(currentApp)
+
+                            val eventId = eventDao.insertEvent(
+                                ru.fokcont.app.data.db.entity.DistractionEventEntity(
                                     sessionId = activeSession.id,
                                     packageName = currentApp,
                                     startTime = System.currentTimeMillis(),
                                     isConfirmedDistraction = false
-                                ))
-
-                                if (isDistracting) {
-                                    // Принудительно выводим наше приложение через PendingIntent или Activity.startActivity
-                                    launchInterruptionUI(currentApp, eventId.toInt())
-                                }
-                                
-                                // Всегда обновляем счетчик переключений при смене приложения (кроме своего)
-                                val updatedSession = activeSession.copy(
-                                    switchCount = activeSession.switchCount + 1
                                 )
-                                repository.updateSession(updatedSession)
+                            )
+
+                            if (isDistracting) {
+                                launchInterruptionUI(currentApp, eventId.toInt())
                             }
+
+                            val updatedSession = activeSession.copy(
+                                switchCount = activeSession.switchCount + 1
+                            )
+
+                            repository.updateSession(updatedSession)
                         }
                     }
                 }
@@ -139,13 +163,20 @@ class TrackingService : Service() {
     }
 
     private fun launchInterruptionUI(packageName: String, eventId: Int) {
-        val intent = Intent(this, MainActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
-            putExtra("navigate_to", "interruption")
-            putExtra("target_package", packageName)
-            putExtra("event_id", eventId)
+        val appName = try {
+            val info = packageManager.getApplicationInfo(packageName, 0)
+            packageManager.getApplicationLabel(info).toString()
+        } catch (e: Exception) {
+            packageName
         }
-        startActivity(intent)
+
+        val intent = Intent(this, InterruptionOverlayService::class.java).apply {
+            putExtra("app_name", appName)
+            putExtra("target_package", packageName)
+            putExtra("event_id", eventId.toInt())
+        }
+
+        startService(intent)
     }
 
     private fun hasUsageStatsPermission(): Boolean {
@@ -189,6 +220,27 @@ class TrackingService : Service() {
 
     override fun onDestroy() {
         isRunning = false
+
+        runBlocking(Dispatchers.IO) {
+            try {
+                val database = AppDatabase.getInstance(applicationContext)
+                val repository = SessionRepository(database.sessionDao())
+                val active = repository.getActiveSession()
+
+                if (active != null) {
+                    val endTime = System.currentTimeMillis()
+
+                    repository.updateSession(
+                        active.copy(
+                            endTime = endTime,
+                            durationSec = (endTime - active.startTime) / 1000
+                        )
+                    )
+                }
+            } catch (_: Exception) {
+            }
+        }
+
         serviceScope.cancel()
         super.onDestroy()
     }

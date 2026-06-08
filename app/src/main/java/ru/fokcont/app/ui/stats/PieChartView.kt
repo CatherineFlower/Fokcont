@@ -7,78 +7,112 @@ import android.graphics.Paint
 import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.View
-import ru.fokcont.app.R
+import kotlin.math.cos
+import kotlin.math.min
+import kotlin.math.sin
 
 class PieChartView @JvmOverloads constructor(
-    context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
 
     private var data: List<Pair<String, Long>> = emptyList()
+
     private val colors = listOf(
-        0xFF4E7E6B.toInt(), // Primary
-        0xFF8FA998.toInt(), // Accent
-        0xFFA7C4B5.toInt(), // Primary Light
-        0xFFBDBDBD.toInt(), // Grey
-        0xFF636E72.toInt()  // Text Secondary
+        0xFF4E7E6B.toInt(),
+        0xFFE05252.toInt(),
+        0xFF598EBA.toInt(),
+        0xFFDAAA4B.toInt(),
+        0xFF8E6BB5.toInt()
     )
 
-    private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+    private val slicePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.FILL
+    }
+
+    private val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        color = Color.WHITE
+        textAlign = Paint.Align.CENTER
+        textSize = 28f
+        isFakeBoldText = true
+    }
+
+    private val smallTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        color = Color.WHITE
+        textAlign = Paint.Align.CENTER
+        textSize = 24f
     }
 
     private val rectF = RectF()
 
     fun setData(newData: List<Pair<String, Long>>) {
-        this.data = newData
+        data = newData.filter { it.second > 0L }
         invalidate()
     }
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        
-        val width = width.toFloat()
-        val height = height.toFloat()
-        val size = Math.min(width, height) * 0.8f
-        
+
+        val viewWidth = width.toFloat()
+        val viewHeight = height.toFloat()
+        val size = min(viewWidth, viewHeight) * 0.76f
+
         rectF.set(
-            (width - size) / 2,
-            (height - size) / 2,
-            (width + size) / 2,
-            (height + size) / 2
+            (viewWidth - size) / 2f,
+            (viewHeight - size) / 2f,
+            (viewWidth + size) / 2f,
+            (viewHeight + size) / 2f
         )
 
-        // Если данных вообще нет (нет сессий)
         if (data.isEmpty()) {
-            paint.color = 0xCCFFFFFF.toInt() // Полупрозрачный белый фон под текст
-            canvas.drawArc(rectF, 0f, 360f, true, paint)
-            
-            paint.color = 0xFF636E72.toInt()
-            paint.textAlign = Paint.Align.CENTER
-            paint.textSize = 40f
-            canvas.drawText("Нет данных", width / 2, height / 2 + 15f, paint)
+            slicePaint.color = 0xFF4E7E6B.toInt()
+            canvas.drawArc(rectF, 0f, 360f, true, slicePaint)
+
+            canvas.drawText("Фокус", viewWidth / 2f, viewHeight / 2f - 6f, smallTextPaint)
+            canvas.drawText("100%", viewWidth / 2f, viewHeight / 2f + 28f, textPaint)
             return
         }
 
         val total = data.sumOf { it.second }.toFloat()
-        
-        // Если сессии есть, но отвлечений 0 - рисуем сплошной зеленый круг
-        if (total == 0f) {
-            paint.color = 0xFF4E7E6B.toInt() // Primary Green
-            canvas.drawArc(rectF, 0f, 360f, true, paint)
-            
-            paint.color = Color.WHITE
-            paint.textAlign = Paint.Align.CENTER
-            paint.textSize = 36f
-            canvas.drawText("Фокус 100%", width / 2, height / 2 + 15f, paint)
-            return
-        }
+        var startAngle = -90f
 
-        var startAngle = 0f
         data.forEachIndexed { index, pair ->
-            val sweepAngle = (pair.second / total) * 360f
-            paint.color = colors[index % colors.size]
-            canvas.drawArc(rectF, startAngle, sweepAngle, true, paint)
+            val sweepAngle = pair.second / total * 360f
+
+            slicePaint.color = colors[index % colors.size]
+            canvas.drawArc(rectF, startAngle, sweepAngle, true, slicePaint)
+
+            if (sweepAngle >= 22f) {
+                drawSliceLabel(canvas, pair.first, pair.second, total, startAngle, sweepAngle, size)
+            }
+
             startAngle += sweepAngle
         }
+    }
+
+    private fun drawSliceLabel(
+        canvas: Canvas,
+        label: String,
+        value: Long,
+        total: Float,
+        startAngle: Float,
+        sweepAngle: Float,
+        size: Float
+    ) {
+        val percent = value / total * 100f
+        val middleAngle = Math.toRadians((startAngle + sweepAngle / 2f).toDouble())
+
+        val radius = size * 0.28f
+        val centerX = width / 2f
+        val centerY = height / 2f
+
+        val x = centerX + cos(middleAngle).toFloat() * radius
+        val y = centerY + sin(middleAngle).toFloat() * radius
+
+        val shortLabel = if (label.length > 9) label.take(9) + "…" else label
+
+        canvas.drawText(shortLabel, x, y - 8f, smallTextPaint)
+        canvas.drawText("${percent.toInt()}%", x, y + 26f, textPaint)
     }
 }

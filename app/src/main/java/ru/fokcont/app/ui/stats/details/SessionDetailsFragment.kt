@@ -46,6 +46,12 @@ class SessionDetailsFragment : Fragment(R.layout.fragment_session_details) {
             val df = SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault())
             binding.sessionTimeText.text = "${df.format(Date(session.startTime))} • ${session.durationSec / 60} мин"
 
+            binding.noteText.text = if (session.note.isNullOrBlank()) {
+                "Заметок нет"
+            } else {
+                session.note
+            }
+
             val pm = requireContext().packageManager
             val groupedEvents = events.groupBy { it.packageName }
 
